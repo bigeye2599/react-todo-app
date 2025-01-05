@@ -1,35 +1,14 @@
-import { useCallback, useState } from "react";
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
-import { Todo } from "../types";
+import useStore from "../useStore";
+import { useEffect } from "react";
 
 function TodoContainer() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todos, addTodo, toggleTodo, fetchTodos } = useStore();
 
-  const addTodo = useCallback((newTodo: string) => {
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      {
-        id: prevTodos.length + 1,
-        text: newTodo,
-        done: false,
-      },
-    ]);
-  }, []);
-
-  const toggleTodo = (id: number) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            done: !todo.done,
-          };
-        }
-        return todo;
-      })
-    );
-  };
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
 
   console.log("todo container rendered");
 
