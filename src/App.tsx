@@ -1,13 +1,9 @@
+import { RouterProvider } from "react-router-dom";
+import router from "./routes";
 import "./App.css";
-import Layout from "./components/Layout";
-import TodoContainer from "./components/TodoContainer";
 
 function App() {
-  return (
-    <Layout>
-      <TodoContainer />
-    </Layout>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
