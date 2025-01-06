@@ -1,16 +1,14 @@
-import { Provider } from "react-redux";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes";
 import "./App.css";
-import Layout from "./components/Layout";
-import TodoContainer from "./components/TodoContainer";
+import { Provider as StoreProvider } from "react-redux";
 import store from "./store";
 
 function App() {
   return (
-    <Provider store={store}>
-      <Layout>
-        <TodoContainer />
-      </Layout>
-    </Provider>
+    <StoreProvider store={store}>
+      <RouterProvider router={router} />
+    </StoreProvider>
   );
 }
 
