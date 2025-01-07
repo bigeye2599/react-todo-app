@@ -1,24 +1,40 @@
 import Checkbox from "./Checkbox";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { todosAtom, toggleTodoAtom } from "../store";
 import { Todo } from "../types";
 
 interface TodoListProps {
-  todos: Todo[];
-  onToggleTodo: (id: number) => void;
+  filter?: "all" | "active" | "completed";
 }
 
-export default function TodoList({ todos, onToggleTodo }: TodoListProps) {
+export default function TodoList({ filter }: TodoListProps) {
+  const todos = useAtomValue(todosAtom);
+  const toggleTodo = useSetAtom(toggleTodoAtom);
+
+  const filteredTodos = filterTodos(todos, filter);
+
   return (
     <ul>
-      {todos.map((todo) => (
+      {filteredTodos.map((todo) => (
         <li key={todo.id}>
           <Checkbox
             id={`todo-${todo.id}`}
             checked={todo.done}
             label={todo.text}
-            onChange={() => onToggleTodo(todo.id)}
+            onChange={() => toggleTodo(todo.id)}
           />
         </li>
       ))}
     </ul>
   );
+}
+
+function filterTodos(todos: Todo[], filter: TodoListProps["filter"]) {
+  if (filter === "active") {
+    return todos.filter((todo) => !todo.done);
+  } else if (filter === "completed") {
+    return todos.filter((todo) => todo.done);
+  }
+
+  return todos;
 }
