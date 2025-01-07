@@ -1,37 +1,25 @@
-import { useCallback, useState } from "react";
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
-import { Todo } from "../types";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  addTodoAtom,
+  fetchTodosAtom,
+  todosAtom,
+  toggleTodoAtom,
+} from "../store";
+import { useEffect } from "react";
 
 function TodoContainer() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const addTodo = useCallback((newTodo: string) => {
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      {
-        id: prevTodos.length + 1,
-        text: newTodo,
-        done: false,
-      },
-    ]);
-  }, []);
-
-  const toggleTodo = (id: number) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            done: !todo.done,
-          };
-        }
-        return todo;
-      })
-    );
-  };
+  const [todos] = useAtom(todosAtom);
+  const addTodo = useSetAtom(addTodoAtom);
+  const toggleTodo = useSetAtom(toggleTodoAtom);
+  const fetchTodos = useSetAtom(fetchTodosAtom);
 
   console.log("todo container rendered");
+
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
 
   return (
     <div>
