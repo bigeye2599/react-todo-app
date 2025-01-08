@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import TodoContainer from "./components/TodoContainer/TodoContainer";
-import TodoList from "./components/TodoList";
+import { lazy, Suspense } from "react";
+
+const LazyTodoList = lazy(() => import("./components/TodoList"));
 
 const router = createBrowserRouter([
   {
@@ -9,19 +10,28 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <TodoContainer />,
+        lazy: async () => {
+          const { default: TodoContainer } = await import(
+            "./components/TodoContainer/TodoContainer"
+          );
+          return { Component: TodoContainer };
+        },
         children: [
           {
             index: true,
-            element: <TodoList />,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <LazyTodoList />
+              </Suspense>
+            ),
           },
           {
-            path: "/active",
-            element: <TodoList filter="active" />,
-          },
-          {
-            path: "/completed",
-            element: <TodoList filter="completed" />,
+            path: "/:filter",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <LazyTodoList />
+              </Suspense>
+            ),
           },
         ],
       },

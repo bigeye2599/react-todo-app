@@ -1,15 +1,15 @@
 import Checkbox from "./Checkbox";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { todosAtom, toggleTodoAtom } from "../store";
 import { Todo } from "../types";
+import { useParams } from "react-router-dom";
 
-interface TodoListProps {
-  filter?: "all" | "active" | "completed";
-}
-
-export default function TodoList({ filter }: TodoListProps) {
+export default function TodoList() {
   const todos = useAtomValue(todosAtom);
   const toggleTodo = useSetAtom(toggleTodoAtom);
+  const { filter = "all" } = useParams<{
+    filter?: "all" | "active" | "completed";
+  }>();
 
   const filteredTodos = filterTodos(todos, filter);
 
@@ -29,7 +29,7 @@ export default function TodoList({ filter }: TodoListProps) {
   );
 }
 
-function filterTodos(todos: Todo[], filter: TodoListProps["filter"]) {
+function filterTodos(todos: Todo[], filter: "all" | "active" | "completed") {
   if (filter === "active") {
     return todos.filter((todo) => !todo.done);
   } else if (filter === "completed") {
