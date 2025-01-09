@@ -32,3 +32,5 @@ export const fetchTodosAtom = atom(null, async (_, set) => {
   const todos = await getTodos();
   set(todosAtom, todos);
 });
+
+export const userAtom = atom<{ username: string } | null>(null);
