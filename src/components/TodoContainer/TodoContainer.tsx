@@ -23,6 +23,10 @@ function TodoContainer() {
             `todo-container__link ${isActive && "todo-container__link--active"}`
           }
           to="/"
+          replace
+          state={{
+            filter: "all",
+          }}
         >
           all
         </NavLink>
@@ -30,7 +34,11 @@ function TodoContainer() {
           className={({ isActive }) =>
             `todo-container__link ${isActive && "todo-container__link--active"}`
           }
-          to="/active"
+          to="/"
+          replace
+          state={{
+            filter: "active",
+          }}
         >
           active
         </NavLink>
@@ -38,7 +46,11 @@ function TodoContainer() {
           className={({ isActive }) =>
             `todo-container__link ${isActive && "todo-container__link--active"}`
           }
-          to="/completed"
+          to="/"
+          replace
+          state={{
+            filter: "completed",
+          }}
         >
           completed
         </NavLink>

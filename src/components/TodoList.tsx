@@ -2,12 +2,11 @@ import Checkbox from "./Checkbox";
 import { Todo } from "../types";
 import { toggleTodo } from "../slices/todoSlice";
 import { useDispatch, useSelector } from "../hooks/useRedux";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function TodoList() {
-  const { filter = "all" } = useParams<{
-    filter?: "all" | "active" | "completed";
-  }>();
+  const location = useLocation();
+  const filter = location.state?.filter ?? "all";
 
   const filteredTodos = useSelector((state) => {
     const filteredTodo = filterTodos(state.todo.todos, filter);
@@ -32,6 +31,10 @@ export default function TodoList() {
 }
 
 function filterTodos(todos: Todo[], filter: "all" | "active" | "completed") {
+  if (todos.length === 0) {
+    return todos;
+  }
+
   if (filter === "active") {
     return todos.filter((todo) => !todo.done);
   } else if (filter === "completed") {
