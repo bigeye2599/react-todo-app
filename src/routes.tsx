@@ -3,6 +3,7 @@ import Layout from "./components/Layout/Layout";
 import { lazy, PropsWithChildren, Suspense } from "react";
 import Login from "./components/Login";
 import { useSelector } from "./hooks/useRedux";
+import TodoListWithQuery from "./components/TodoListWithQuery";
 
 const LazyTodoList = lazy(() => import("./components/TodoList"));
 
@@ -62,6 +63,21 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/with-query",
+        lazy: async () => {
+          const { default: TodoContainer } = await import(
+            "./components/TodoContainer/TodoContainerWithQuery"
+          );
+          return { Component: TodoContainer };
+        },
+        children: [
+          {
+            index: true,
+            element: <TodoListWithQuery />,
+          },
+        ],
       },
     ],
   },
